@@ -24,10 +24,15 @@ public class Main {
 
         System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
 
+        printData(tasksData);
+        printDataWithStreams(tasksData);
+
         printDeadlinesUsingStreams(tasksData);
 
-        ArrayList<Task> filteredList = filterTasksBySting(tasksData, "11");
+        ArrayList<Task> filteredList = filterTasksByString(tasksData, "11");
         printData(filteredList);
+        System.out.println("Total number of deadlines (using stream): " +
+                countDeadlinesWithStreams(tasksData));
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -40,10 +45,22 @@ public class Main {
         return count;
     }
 
+    private static int countDeadlinesWithStreams(ArrayList<Task> tasksData) {
+        return (int) tasksData.stream()
+                .filter(t -> t instanceof Deadline)
+                .count();
+    }
+
     public static void printData(ArrayList<Task> tasksData) {
         for (Task t : tasksData) {
             System.out.println(t);
         }
+    }
+
+    public static void printDataWithStreams(ArrayList<Task> tasksData) {
+        System.out.println("Printing tasks data using stream");
+        tasksData.stream()
+                .forEach(System.out::println);
     }
 
     public static void printDeadlines(ArrayList<Task> tasksData) {
@@ -61,7 +78,7 @@ public class Main {
                 .forEach(System.out::println);
     }
 
-    public static ArrayList<Task> filterTasksBySting(ArrayList<Task> tasksData, String filterString) {
+    public static ArrayList<Task> filterTasksByString(ArrayList<Task> tasksData, String filterString) {
         ArrayList<Task> filteredList = (ArrayList<Task>)tasksData.stream()
                 .filter((t) -> t.getDescription().contains(filterString))
                 .collect(toList());
